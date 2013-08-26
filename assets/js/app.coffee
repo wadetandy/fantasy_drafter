@@ -21,8 +21,8 @@ draftPickerCtrl = ($scope, angularFire) ->
 
 
   angularFire("https://brilliance.firebaseio.com/roster", $scope, 'roster', {}).then ()->
-    angularFire("https://brilliance.firebaseio.com/all_players", $scope, 'all_players', {}).then ()-> 
-      angularFire("https://brilliance.firebaseio.com/players", $scope, 'players', []).then ()-> 
+    angularFire("https://brilliance.firebaseio.com/all_players", $scope, 'all_players', {}).then ()->
+      angularFire("https://brilliance.firebaseio.com/players", $scope, 'players', []).then ()->
         angularFire("https://brilliance.firebaseio.com/byes", $scope, 'byes', {}).then playersHandlers
 
   playersHandlers = ()->
@@ -33,18 +33,18 @@ draftPickerCtrl = ($scope, angularFire) ->
     do resetByes = ()->
       $scope.bye_counts = {} if not $scope.bye_counts
       for bye,week of $scope.byes
-        $scope.bye_counts[week] = 0 
+        $scope.bye_counts[week] = 0
 
     $scope.positionNeeds = (position) ->
       resetByes()
       need = $scope.roster.required[position]
-      if $scope.roster.selections.length == 0 
+      if $scope.roster.selections.length == 0
         return need
 
       have = 0
       for sel in $scope.roster.selections
         $scope.bye_counts[$scope.getBye(sel)] += 1
-        have += 1 if $scope.all_players[sel].Position == position 
+        have += 1 if $scope.all_players[sel].Position == position
 
       req = need - have
       if req < -1
